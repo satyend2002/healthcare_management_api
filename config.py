@@ -6,15 +6,17 @@ load_dotenv()
 class Config:
 
     SQLALCHEMY_DATABASE_URI = (
-        f"mysql+pymysql://"      
+        f"mysql+pymysql://"
         f"{os.getenv('DB_USER')}:"
         f"{os.getenv('DB_PASSWORD')}@"
         f"{os.getenv('DB_HOST')}:"
         f"{os.getenv('DB_PORT')}/"
         f"{os.getenv('DB_NAME')}"
-    )  # mysql://scott:tiger@localhost/project
+    )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_SECRET_KEY = "change-this-to-a-strong-secret-key"
+
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+
     JWT_ACCESS_TOKEN_EXPIRES = 3600
     JWT_REFRESH_TOKEN_EXPIRES = 2592000
