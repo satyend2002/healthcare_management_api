@@ -5,6 +5,8 @@ from flask_jwt_extended import (
     get_jwt
 )
 
+from flask_jwt_extended.exceptions import NoAuthorizationError
+
 
 def role_required(*allowed_roles):
 
@@ -13,9 +15,14 @@ def role_required(*allowed_roles):
         @wraps(function)
         def wrapper(*args, **kwargs):
 
-            verify_jwt_in_request()
+            try:
+                verify_jwt_in_request()
+            except NoAuthorizationError:
+                return {
+                    "message": "Authorization token is required"
+                }, 401
 
-            claims = get_jwt() 
+            claims = get_jwt()
             user_role = claims.get("role")
 
             if user_role not in allowed_roles:
